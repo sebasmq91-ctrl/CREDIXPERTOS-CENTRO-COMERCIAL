@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credixpertos · Centro de Aprendizaje Comercial</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brand: #0A2540;
+  --brand-light: #1a3d5c;
+  --cyan: #00B4C8;
+  --cyan-light: #E6F8FA;
+  --gold: #C9922A;
+  --gold-light: #FEF3C7;
+  --green: #166534;
+  --green-bg: #DCFCE7;
+  --red: #991B1B;
+  --red-bg: #FEE2E2;
+  --cream: #F8F6F1;
+  --white: #FFFFFF;
+  --text: #1C1C2E;
+  --muted: #6B7280;
+  --border: #E2D9CF;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); line-height: 1.65; }
+
+/* ESTRUCTURA PRINCIPAL */
+.app-wrap { display: flex; min-height: 100vh; }
+
+/* SIDEBAR */
+.sidebar {
+  width: 280px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-light));
+  color: white;
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 100;
+  padding: 24px 0;
+}
+
+.sidebar-logo {
+  padding: 0 24px 32px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 20px;
+}
+
+.sidebar-logo h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.sidebar-logo p {
+  font-size: 11px;
+  opacity: 0.7;
+  color: var(--cyan);
+}
+
+.sidebar-menu {
+  list-style: none;
+}
+
+.sidebar-menu li {
+  margin: 0;
+  border-left: 4px solid transparent;
+  transition: all 0.2s;
+}
+
+.sidebar-menu li.active {
+  border-left-color: var(--cyan);
+  background: rgba(0,180,200,0.1);
+}
+
+.sidebar-menu button {
+  width: 100%;
+  padding: 14px 24px;
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-menu li.active button {
+  color: var(--cyan);
+  font-weight: 700;
+}
+
+.sidebar-menu button:hover:not(.active button) {
+  padding-left: 28px;
+  opacity: 0.8;
+}
+
+.sidebar-menu .icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+
+/* MAIN CONTENT */
+.main-content {
+  margin-left: 280px;
+  flex: 1;
+  padding: 40px;
+  max-width: calc(100% - 280px);
+}
+
+/* HEADER DE PÁGINA */
+.page-header {
+  margin-bottom: 40px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.page-tag {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-bottom: 10px;
+}
+
+.page-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 36px;
+  color: var(--brand);
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+
+.page-subtitle {
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 680px;
+}
+
+/* SECCIONES */
+.section {
+  display: none;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.section.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* TARJETAS */
+.card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: all 0.2s;
+}
+
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+/* KPI GRID */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.kpi-card {
+  background: white;
+  border-radius: 14px;
+  padding: 24px;
+  border-top: 4px solid var(--cyan);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: all 0.2s;
+}
+
+.kpi-card.cyan { border-top-color: var(--cyan); }
+.kpi-card.green { border-top-color: var(--green); }
+.kpi-card.gold { border-top-color: var(--gold); }
+.kpi-card.red { border-top-color: var(--red); }
+
+.kpi-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.kpi-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--brand);
+  margin-bottom: 16px;
+}
+
+.kpi-target {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--cream);
+  font-size: 13px;
+}
+
+.kpi-target:last-child {
+  border-bottom: none;
+}
+
+.kpi-target .label {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.kpi-target .value {
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.kpi-target .value.gold { color: var(--gold); }
+.kpi-target .value.green { color: var(--green); }
+
+/* ALERT BOX */
+.alert {
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.alert-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.alert.cyan {
+  background: var(--cyan-light);
+  border: 1px solid #BDEFEA;
+  color: #0a5c6e;
+}
+
+.alert.gold {
+  background: var(--gold-light);
+  border: 1px solid #FCD34D;
+  color: var(--amber);
+}
+
+.alert strong {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+/* TABS */
+.tab-buttons {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: -2px;
+}
+
+.tab-btn.active {
+  color: var(--brand);
+  border-bottom-color: var(--cyan);
+}
+
+.tab-btn:hover {
+  color: var(--brand);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 16px 0;
+  }
+  
+  .main-content {
+    margin-left: 0;
+    max-width: 100%;
+    padding: 20px;
+  }
+  
+  .page-title {
+    font-size: 26px;
+  }
+  
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .sidebar-menu button {
+    padding: 12px 16px;
+    font-size: 12px;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="app-wrap">
+
+<!-- SIDEBAR NAVEGACIÓN -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <h2>Credixpertos</h2>
+    <p>Centro Comercial</p>
+  </div>
+  
+  <ul class="sidebar-menu">
+    <li class="active" data-section="inicio">
+      <button onclick="switchSection('inicio')">
+        <span class="icon">🏠</span>
+        <span>Inicio</span>
+      </button>
+    </li>
+    <li data-section="proceso">
+      <button onclick="switchSection('proceso')">
+        <span class="icon">🗺️</span>
+        <span>1. El Proceso</span>
+      </button>
+    </li>
+    <li data-section="politicas">
+      <button onclick="switchSection('politicas')">
+        <span class="icon">📋</span>
+        <span>2. Políticas & Ruteo</span>
+      </button>
+    </li>
+    <li data-section="desarrollo">
+      <button onclick="switchSection('desarrollo')">
+        <span class="icon">📈</span>
+        <span>3. Tu Desarrollo</span>
+      </button>
+    </li>
+    <li data-section="cartilla">
+      <button onclick="switchSection('cartilla')">
+        <span class="icon">📖</span>
+        <span>4. Cartilla del Asesor</span>
+      </button>
+    </li>
+    <li data-section="calculadora">
+      <button onclick="switchSection('calculadora')">
+        <span class="icon">🧮</span>
+        <span>5. Calculadora</span>
+      </button>
+    </li>
+  </ul>
+</aside>
+
+<!-- CONTENIDO PRINCIPAL -->
+<main class="main-content">
+
+<!-- ===== SECCIÓN: INICIO ===== -->
+<section class="section active" id="inicio">
+  <div class="page-header">
+    <div class="page-tag">Bienvenido</div>
+    <h1 class="page-title">Centro de Aprendizaje <span style="color: var(--cyan);">Comercial</span></h1>
+    <p class="page-subtitle">Toda la información que necesitas para ser el mejor asesor de créditos libranza. Aprende el proceso, domina las políticas, logra tus metas.</p>
+  </div>
+
+  <div class="kpi-grid" style="margin-top: 40px;">
+    <div class="card" style="cursor: pointer; transition: all 0.3s;" onclick="switchSection('desarrollo')">
+      <div style="text-align: center; padding: 20px 0;">
+        <div style="font-size: 24px; margin-bottom: 12px;">📊</div>
+        <h3 style="font-size: 18px; color: var(--brand); margin-bottom: 8px;">Tus Metas Diarias</h3>
+        <p style="color: var(--muted); font-size: 13px;">Ve exactamente qué debes lograr cada día</p>
+        <div style="margin-top: 16px; font-weight: 700; color: var(--cyan);">Ir a metas →</div>
+      </div>
+    </div>
+
+    <div class="card" style="cursor: pointer; transition: all 0.3s;" onclick="switchSection('proceso')">
+      <div style="text-align: center; padding: 20px 0;">
+        <div style="font-size: 24px; margin-bottom: 12px;">🗺️</div>
+        <h3 style="font-size: 18px; color: var(--brand); margin-bottom: 8px;">El Proceso</h3>
+        <p style="color: var(--muted); font-size: 13px;">Entiende cada paso desde el lead hasta desembolso</p>
+        <div style="margin-top: 16px; font-weight: 700; color: var(--cyan);">Ver proceso →</div>
+      </div>
+    </div>
+
+    <div class="card" style="cursor: pointer; transition: all 0.3s;" onclick="switchSection('cartilla')">
+      <div style="text-align: center; padding: 20px 0;">
+        <div style="font-size: 24px; margin-bottom: 12px;">📖</div>
+        <h3 style="font-size: 18px; color: var(--brand); margin-bottom: 8px;">Cartilla</h3>
+        <p style="color: var(--muted); font-size: 13px;">Técnicas, objecciones, contacto, retoma de clientes</p>
+        <div style="margin-top: 16px; font-weight: 700; color: var(--cyan);">Ver cartilla →</div>
+      </div>
+    </div>
+
+    <div class="card" style="cursor: pointer; transition: all 0.3s;" onclick="switchSection('calculadora')">
+      <div style="text-align: center; padding: 20px 0;">
+        <div style="font-size: 24px; margin-bottom: 12px;">🧮</div>
+        <h3 style="font-size: 18px; color: var(--brand); margin-bottom: 8px;">Calculadora</h3>
+        <p style="color: var(--muted); font-size: 13px;">Calcula cuotas al instante en las llamadas</p>
+        <div style="margin-top: 16px; font-weight: 700; color: var(--cyan);">Abrir →</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert cyan" style="margin-top: 40px;">
+    <span class="alert-icon">💡</span>
+    <div>
+      <strong>Tip para hoy:</strong>
+      Recuerda: Tu único objetivo es que el cliente envíe documentos (cédula + desprendible). Todo lo demás lo hace el analista. Enfócate en eso.
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECCIÓN: PROCESO ===== -->
+<section class="section" id="proceso">
+  <div class="page-header">
+    <div class="page-tag">Entiende cómo funciona</div>
+    <h1 class="page-title">El Proceso <span style="color: var(--cyan);">Completo</span></h1>
+    <p class="page-subtitle">De un lead a un desembolso exitoso. Aquí está cada paso, quién lo hace, y por qué importa.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="font-size: 18px; color: var(--brand); margin-bottom: 20px;">📋 Los 7 Pasos del Proceso</h3>
+    
+    <div style="display: grid; gap: 16px;">
+      <!-- PASO 1 -->
+      <div style="background: var(--cyan-light); border-left: 4px solid var(--cyan); padding: 16px; border-radius: 8px;">
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <div style="background: var(--cyan); color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">1</div>
+          <div>
+            <h4 style="font-weight: 700; margin-bottom: 4px; color: var(--brand);">Lead ingresa al sistema</h4>
+            <p style="font-size: 13px; color: #0a5c6e; margin-bottom: 8px;"><strong>Quién:</strong> Sistema (IA, campañas, mercado natural)</p>
+            <p style="font-size: 13px; color: #0a5c6e;"><strong>Resultado:</strong> Cliente en el CRM con teléfono y datos básicos</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 2 -->
+      <div style="background: #E0FAF9; border-left: 4px solid #00838F; padding: 16px; border-radius: 8px;">
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <div style="background: #00838F; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">2</div>
+          <div>
+            <h4 style="font-weight: 700; margin-bottom: 4px; color: var(--brand);">TÚ contactas al cliente</h4>
+            <p style="font-size: 13px; color: #0a5c6e; margin-bottom: 8px;"><strong>Quién:</strong> TÚ (Asesor)</p>
+            <p style="font-size: 13px; color: #0a5c6e; margin-bottom: 8px;"><strong>Qué haces:</strong> Llama a la hora pactada, sondea necesidad, ofrece crédito</p>
+            <p style="font-size: 13px; color: #0a5c6e;"><strong>Tu objetivo:</strong> Que envíe cédula + desprendible</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 3 -->
+      <div style="background: var(--green-bg); border-left: 4px solid var(--green); padding: 16px; border-radius: 8px;">
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <div style="background: var(--green); color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">3</div>
+          <div>
+            <h4 style="font-weight: 700; margin-bottom: 4px; color: var(--brand);">Registras en CRM</h4>
+            <p style="font-size: 13px; color: #166534; margin-bottom: 8px;"><strong>Quién:</strong> TÚ (el mismo día)</p>
+            <p style="font-size: 13px; color: #166534;"><strong>Qué anotas:</strong> Qué pasó, próxima acción, documentos que tiene</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 4 -->
+      <div style="background: #F1ECFE; border-left: 4px solid #7B3F9E; padding: 16px; border-radius: 8px;">
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <div style="background: #7B3F9E; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">4</div>
+          <div>
+            <h4 style="font-weight: 700; margin-bottom: 4px; color: var(--brand);">Analista revisa y analiza</h4>
+            <p style="font-size: 13px; color: #4C2E9E; margin-bottom: 8px;"><strong>Quién:</strong> Coordinadora / Analista Operativa</p>
+            <p style="font-size: 13px; color: #4C2E9E; margin-bottom: 8px;"><strong>Qué hace:</strong> Verifica documentos, busca mejor entidad, calcula oferta</p>
+            <p style="font-size: 13px; color: #4C2E9E;"><strong>Resultado:</strong> Propuesta viable de crédito</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 5 -->
+      <div style="background: #E0FAF9; border-left: 4px solid #00838F; padding: 16px; border-radius: 8px;">
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <div style="background: #00838F; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">5</div>
+          <div>
+            <h4 style="font-weight: 700; margin-bottom: 4px; color: var(--brand);">TÚ cierras al cliente</h4>
+            <p style="font-size: 13px; color: #0a5c6e; margin-bottom: 8px;"><strong>Quién:</strong> TÚ (Asesor)</p>
+            <p style="font-size: 13px; color: #0a5c6e; margin-bottom: 8px;"><strong>Qué haces:</strong> Llamas con la oferta, explicas disponible/plazo, cierras</p>
+            <p style="font-size: 13px; color: #0a5c6e;"><strong>Si dice sí:</strong> Analista radica en la entidad</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 6 -->
+      <div style="background: #F1ECFE; border-left: 4px solid #7B3F9E; padding: 16px; border-radius: 8px;">
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <div style="background: #7B3F9E; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">6</div>
+          <div>
+            <h4 style="font-weight: 700; margin-bottom: 4px; color: var(--brand);">Radicación y seguimiento</h4>
+            <p style="font-size: 13px; color: #4C2E9E; margin-bottom: 8px;"><strong>Quién:</strong> Analista</p>
+            <p style="font-size: 13px; color: #4C2E9E; margin-bottom: 8px;"><strong>Qué hace:</strong> Radica en entidad, da seguimiento, informa al asesor</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PASO 7 -->
+      <div style="background: var(--gold-light); border-left: 4px solid var(--gold); padding: 16px; border-radius: 8px;">
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <div style="background: var(--gold); color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">✓</div>
+          <div>
+            <h4 style="font-weight: 700; margin-bottom: 4px; color: var(--brand);">Desembolso exitoso</h4>
+            <p style="font-size: 13px; color: var(--amber); margin-bottom: 8px;"><strong>Resultado:</strong> Dinero en la cuenta del cliente</p>
+            <p style="font-size: 13px; color: var(--amber);"><strong>Tu comisión:</strong> Se genera cuando desembolsa (no antes)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert gold" style="margin-top: 24px;">
+      <span class="alert-icon">⚡</span>
+      <div>
+        <strong>Recuerda:</strong> Tu rol termina cuando el cliente dice "sí" Y tiene documentos. De ahí en adelante, el analista se encarga. No es tu responsabilidad radicar ni hacer seguimiento de entidades. Tú haces lo tuyo: conseguir clientes interesados con documentos.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECCIÓN: DESARROLLO ===== -->
+<section class="section" id="desarrollo">
+  <div class="page-header">
+    <div class="page-tag">Tu crecimiento</div>
+    <h1 class="page-title">Tu Desarrollo <span style="color: var(--cyan);">Profesional</span></h1>
+    <p class="page-subtitle">Tus KPIs, módulos de formación y todo lo que necesitas para crecer en Credixpertos.</p>
+  </div>
+
+  <!-- TABS -->
+  <div class="tab-buttons">
+    <button class="tab-btn active" onclick="switchTab('tab-kpi', this)">Mis KPIs</button>
+    <button class="tab-btn" onclick="switchTab('tab-modulos', this)">Módulos de Formación</button>
+    <button class="tab-btn" onclick="switchTab('tab-progreso', this)">Mi Progreso</button>
+  </div>
+
+  <!-- TAB: KPIs -->
+  <div id="tab-kpi">
+    <div class="card">
+      <h3 style="font-size: 18px; color: var(--brand); margin-bottom: 24px;">📊 Tus Metas Diarias</h3>
+      
+      <div class="kpi-grid">
+        <!-- Llamadas -->
+        <div class="kpi-card cyan">
+          <div class="kpi-label">Contacto</div>
+          <div class="kpi-name">Llamadas realizadas</div>
+          <div class="kpi-target">
+            <span class="label">Mínimo</span>
+            <span class="value gold">60 / día</span>
+          </div>
+          <div class="kpi-target">
+            <span class="label">Meta</span>
+            <span class="value green">80 / día</span>
+          </div>
+        </div>
+
+        <!-- Clientes con doc -->
+        <div class="kpi-card green">
+          <div class="kpi-label">Conversión</div>
+          <div class="kpi-name">Clientes con documentación</div>
+          <div class="kpi-target">
+            <span class="label">Mínimo</span>
+            <span class="value gold">6 / día</span>
+          </div>
+          <div class="kpi-target">
+            <span class="label">Meta</span>
+            <span class="value green">10 / día</span>
+          </div>
+        </div>
+
+        <!-- Radicaciones -->
+        <div class="kpi-card gold">
+          <div class="kpi-label">Operaciones</div>
+          <div class="kpi-name">Radicaciones nuevas</div>
+          <div class="kpi-target">
+            <span class="label">Mínimo</span>
+            <span class="value gold">3 / día</span>
+          </div>
+          <div class="kpi-target">
+            <span class="label">Meta</span>
+            <span class="value green">5 / día</span>
+          </div>
+        </div>
+
+        <!-- Desembolsos -->
+        <div class="kpi-card green">
+          <div class="kpi-label">Cierre</div>
+          <div class="kpi-name">Desembolsos</div>
+          <div class="kpi-target">
+            <span class="label">Mínimo</span>
+            <span class="value gold">5 / mes</span>
+          </div>
+          <div class="kpi-target">
+            <span class="label">Meta</span>
+            <span class="value green">10 / mes</span>
+          </div>
+        </div>
+
+        <!-- Tasa devoluciones -->
+        <div class="kpi-card red">
+          <div class="kpi-label">Calidad</div>
+          <div class="kpi-name">Tasa de devoluciones</div>
+          <div class="kpi-target">
+            <span class="label">Aceptable</span>
+            <span class="value gold">Máx 15%</span>
+          </div>
+          <div class="kpi-target">
+            <span class="label">Alerta</span>
+            <span class="value red">+20% = revisión</span>
+          </div>
+        </div>
+
+        <!-- CRM -->
+        <div class="kpi-card" style="border-top-color: var(--brand);">
+          <div class="kpi-label">CRM</div>
+          <div class="kpi-name">Registros al día</div>
+          <div class="kpi-target">
+            <span class="label">Estándar</span>
+            <span class="value green">100% mismo día</span>
+          </div>
+          <div class="kpi-target">
+            <span class="label">Alerta</span>
+            <span class="value red">Gestiones sin anotar</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert cyan">
+      <span class="alert-icon">💡</span>
+      <div>
+        <strong>¿Cómo se miden?</strong> Cada día a las 5pm se genera el reporte de tus métricas. Si caes bajo el mínimo, recibes una alerta. Si mantienes la meta, eso genera comisión adicional.
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: MÓDULOS -->
+  <div id="tab-modulos" style="display: none;">
+    <div class="card">
+      <h3 style="font-size: 18px; color: var(--brand); margin-bottom: 24px;">📚 Módulos Disponibles para tu Formación</h3>
+      
+      <p style="font-size: 13px; color: var(--muted); margin-bottom: 24px;">Selecciona los módulos que quieres tomar. Tú decides CUÁNDO capacitarte. Cada uno tiene duración aproximada y contenido específico.</p>
+
+      <div style="display: grid; gap: 12px;">
+        <!-- MÓDULO 1 -->
+        <div style="background: #F9F7F3; border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 14px; align-items: flex-start;">
+          <div style="width: 40px; height: 40px; background: var(--cyan-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--cyan); font-weight: 700; flex-shrink: 0;">1</div>
+          <div style="flex: 1;">
+            <h4 style="font-weight: 700; color: var(--brand); margin-bottom: 4px;">Inducción Credixpertos</h4>
+            <p style="font-size: 12px; color: var(--muted); margin-bottom: 8px;">Qué es libranza, cómo opera Credixpertos, CRM, protocolo de contacto, herramienta de políticas</p>
+            <p style="font-size: 11px; color: var(--muted);"><strong>Duración:</strong> 2 horas · <strong>Requisito:</strong> Todos los nuevos asesores</p>
+          </div>
+          <button style="padding: 10px 16px; background: var(--cyan); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 12px; cursor: pointer; white-space: nowrap; flex-shrink: 0;">Programar</button>
+        </div>
+
+        <!-- MÓDULO 2 -->
+        <div style="background: #F9F7F3; border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 14px; align-items: flex-start;">
+          <div style="width: 40px; height: 40px; background: var(--green-bg); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--green); font-weight: 700; flex-shrink: 0;">2</div>
+          <div style="flex: 1;">
+            <h4 style="font-weight: 700; color: var(--brand); margin-bottom: 4px;">Políticas de Entidades</h4>
+            <p style="font-size: 12px; color: var(--muted); margin-bottom: 8px;">Condiciones, montos, plazos, pagadurías que acepta, casos especiales por entidad</p>
+            <p style="font-size: 11px; color: var(--muted);"><strong>Duración:</strong> 1 hora por entidad · <strong>Tipo:</strong> Semanal</p>
+          </div>
+          <button style="padding: 10px 16px; background: var(--cyan); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 12px; cursor: pointer; white-space: nowrap; flex-shrink: 0;">Programar</button>
+        </div>
+
+        <!-- MÓDULO 3 -->
+        <div style="background: #F9F7F3; border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 14px; align-items: flex-start;">
+          <div style="width: 40px; height: 40px; background: var(--gold-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--gold-dark); font-weight: 700; flex-shrink: 0;">3</div>
+          <div style="flex: 1;">
+            <h4 style="font-weight: 700; color: var(--brand); margin-bottom: 4px;">Técnicas de Ventas y Objeciones</h4>
+            <p style="font-size: 12px; color: var(--muted); margin-bottom: 8px;">Guión de apertura, las 5 objeciones más comunes, técnicas de cierre, role play</p>
+            <p style="font-size: 11px; color: var(--muted);"><strong>Duración:</strong> 1.5 horas · <strong>Tipo:</strong> Quincenal</p>
+          </div>
+          <button style="padding: 10px 16px; background: var(--cyan); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 12px; cursor: pointer; white-space: nowrap; flex-shrink: 0;">Programar</button>
+        </div>
+
+        <!-- MÓDULO 4 -->
+        <div style="background: #F9F7F3; border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 14px; align-items: flex-start;">
+          <div style="width: 40px; height: 40px; background: var(--green-bg); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--green); font-weight: 700; flex-shrink: 0;">4</div>
+          <div style="flex: 1;">
+            <h4 style="font-weight: 700; color: var(--brand); margin-bottom: 4px;">Perfilamiento por Pagaduría</h4>
+            <p style="font-size: 12px; color: var(--muted); margin-bottom: 8px;">Cómo leer desprendibles, cálculo del disponible real, diferencias por pagaduría (CASUR, CREMIL, etc)</p>
+            <p style="font-size: 11px; color: var(--muted);"><strong>Duración:</strong> 1 hora · <strong>Tipo:</strong> Mensual</p>
+          </div>
+          <button style="padding: 10px 16px; background: var(--cyan); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 12px; cursor: pointer; white-space: nowrap; flex-shrink: 0;">Programar</button>
+        </div>
+
+        <!-- MÓDULO 5 -->
+        <div style="background: #F9F7F3; border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; gap: 14px; align-items: flex-start;">
+          <div style="width: 40px; height: 40px; background: var(--blue-bg, #DBEAFE); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #0A7FB3; font-weight: 700; flex-shrink: 0;">5</div>
+          <div style="flex: 1;">
+            <h4 style="font-weight: 700; color: var(--brand); margin-bottom: 4px;">Uso Avanzado del CRM</h4>
+            <p style="font-size: 12px; color: var(--muted); margin-bottom: 8px;">Cómo registrar correctamente, mover etapas, usar filtros, evitar errores comunes</p>
+            <p style="font-size: 11px; color: var(--muted);"><strong>Duración:</strong> 45 minutos · <strong>Tipo:</strong> Mensual</p>
+          </div>
+          <button style="padding: 10px 16px; background: var(--cyan); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 12px; cursor: pointer; white-space: nowrap; flex-shrink: 0;">Programar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: PROGRESO -->
+  <div id="tab-progreso" style="display: none;">
+    <div class="card">
+      <h3 style="font-size: 18px; color: var(--brand); margin-bottom: 24px;">🏆 Tu Progreso en Formación</h3>
+      
+      <div style="background: var(--green-bg); border: 1px solid #86EFAC; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+        <div style="font-size: 28px; font-weight: 900; color: var(--green); margin-bottom: 8px;">✓ Inducción Credixpertos</div>
+        <p style="font-size: 13px; color: #166534;">Completado el 15 de abril, 2026</p>
+      </div>
+
+      <div style="background: #F9F7F3; border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
+        <div style="font-weight: 700; color: var(--brand); margin-bottom: 12px;">Pendientes de completar:</div>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+          <li style="padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 13px;"><input type="checkbox" disabled> Políticas de Entidades</li>
+          <li style="padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 13px;"><input type="checkbox" disabled> Técnicas de Ventas</li>
+          <li style="padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 13px;"><input type="checkbox" disabled> Perfilamiento por Pagaduría</li>
+          <li style="padding: 12px 0; font-size: 13px;"><input type="checkbox" disabled> Uso Avanzado del CRM</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECCIÓN: CARTILLA ===== -->
+<section class="section" id="cartilla">
+  <div class="page-header">
+    <div class="page-tag">Tu guía diaria</div>
+    <h1 class="page-title">Cartilla del <span style="color: var(--cyan);">Asesor</span></h1>
+    <p class="page-subtitle">Todo lo que necesitas para ser excelente: cómo contactar, manejar objeciones, retomar clientes, y convertir en documentos.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="font-size: 16px; color: var(--brand); margin-bottom: 20px;">Selecciona el tema que quieres aprender</h3>
+    
+    <div class="tab-buttons" style="border-bottom: none; gap: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+      <button class="tab-btn" onclick="switchCartilla('contacto-frio', this)" style="text-align: center; border: 1px solid var(--border); border-bottom: 3px solid transparent; padding: 14px 16px;">☎️ Contacto en Frío</button>
+      <button class="tab-btn" onclick="switchCartilla('contacto-precalificado', this)" style="text-align: center; border: 1px solid var(--border); border-bottom: 3px solid transparent; padding: 14px 16px;">✨ Lead Pre-clasificado</button>
+      <button class="tab-btn" onclick="switchCartilla('oferta', this)" style="text-align: center; border: 1px solid var(--border); border-bottom: 3px solid transparent; padding: 14px 16px;">💰 Oferta Atractiva</button>
+      <button class="tab-btn" onclick="switchCartilla('objeciones', this)" style="text-align: center; border: 1px solid var(--border); border-bottom: 3px solid transparent; padding: 14px 16px;">⚡ Manejo de Objeciones</button>
+      <button class="tab-btn" onclick="switchCartilla('retoma', this)" style="text-align: center; border: 1px solid var(--border); border-bottom: 3px solid transparent; padding: 14px 16px;">🔄 Retoma de Clientes</button>
+      <button class="tab-btn" onclick="switchCartilla('cierre', this)" style="text-align: center; border: 1px solid var(--border); border-bottom: 3px solid transparent; padding: 14px 16px;">✓ Tu Objetivo: DOCUMENTOS</button>
+    </div>
+  </div>
+
+  <!-- CONTENIDOS CARTILLA -->
+  <div id="contacto-frio" style="display: none;">
+    <div class="card">
+      <h3 style="font-size: 18px; color: var(--brand); margin-bottom: 20px;">☎️ Cómo Contactar en Frío (Campaña Manual)</h3>
+      <p style="color: var(--muted); margin-bottom: 20px;">Este cliente NO te conoce, NO mostró interés previo. Es más difícil, pero es posible.</p>
+
+      <div style="background: var(--red-bg); border-left: 4px solid var(--red); padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+        <strong style="color: var(--red);">⚠️ Lo más importante:</strong> Identifícate rápido, da valor en 30 segundos, o cuelga.
+      </div>
+
+      <h4 style="font-weight: 700; color: var(--brand); margin: 24px 0 12px;">Paso 1: La Presentación (Los primeros 15 segundos)</h4>
+      <div style="background: #F9F7F3; border-left: 4px solid var(--gold); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+        <p style="font-style: italic; color: var(--brand); margin-bottom: 8px;"><strong>Script:</strong></p>
+        <p style="font-size: 13px; color: var(--text); line-height: 1.8;">
+          "Hola [NOMBRE], soy [TU NOMBRE] de <strong>Credixpertos</strong>. Te llamo porque tenemos un programa de créditos para [su pagaduría] que te puede ahorrar dinero. ¿Tienes 2 minutos?"
+        </p>
+      </div>
+
+      <h4 style="font-weight: 700; color: var(--brand); margin: 24px 0 12px;">Paso 2: El Sondeo (¿Por qué lo llamas?)</h4>
+      <div style="background: #F9F7F3; border-left: 4px solid var(--gold); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+        <p style="font-size: 13px; color: var(--text);"><strong>Pregunta:</strong> "¿Necesitas dinero rápido para algo? O ¿hay algo que quieras hacer pero te falta plata?"</p>
+        <p style="font-size: 12px; color: var(--muted); margin-top: 8px;"><strong>Por qué:</strong> Puede decir "no" o "sí, necesito dinero para X". Si dice sí, ahora hay interés real.</p>
+      </div>
+
+      <h4 style="font-weight: 720; color: var(--brand); margin: 24px 0 12px;">Paso 3: La Propuesta (El Cierre)</h4>
+      <div style="background: #F9F7F3; border-left: 4px solid var(--gold); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+        <p style="font-size: 13px; color: var(--text);"><strong>Si tiene necesidad:</strong> "Perfecto. Te podemos conseguir dinero en 24-48 horas, con cuotas que caben en tu presupuesto. ¿Qué monto necesitas?"</p>
+        <p style="font-size: 13px; color: var(--text); margin-top: 8px;"><strong>Si no tiene necesidad inmediata:</strong> "Está bien. Pero si en algún momento lo necesitas, me llamas. Es mejor tener la opción que no tenerla, ¿verdad?"</p>
+      </div>
+
+      <h4 style="font-weight: 700; color: var(--brand); margin: 24px 0 12px;">Paso 4: Cuántas veces reintentar</h4>
+      <div style="background: var(--cyan-light); border-left: 4px solid var(--cyan); padding: 16px; border-radius: 8px;">
+        <ul style="list-style: none; padding: 0; margin: 0;">
+          <li style="padding: 8px 0; font-size: 13px;"><strong>Primer intento:</strong> Llama a cualquier hora (9am-7pm)</li>
+          <li style="padding: 8px 0; font-size: 13px;"><strong>Si no contesta:</strong> Envía WhatsApp: "Hola [NOMBRE], te llamaba de Credixpertos para hablar de un crédito de libranza. ¿Tienes 2 min mañana?"</li>
+          <li style="padding: 8px 0; font-size: 13px;"><strong>Segundo intento:</strong> Llama al día siguiente a otra hora</li>
+          <li style="padding: 8px 0; font-size: 13px;"><strong>Tercer intento:</strong> Si sigue sin contestar, déjalo por esa semana</li>
+          <li style="padding: 8px 0; font-size: 13px;"><strong>Máximo:</strong> 3 llamadas por semana. Después parece acoso.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="contacto-precalificado" style="display: none;">
+    <div class="card">
+      <h3 style="font-size: 18px; color: var(--brand); margin-bottom: 20px;">✨ Contacto con Lead Pre-clasificado</h3>
+      <p style="color: var(--muted); margin-bottom: 20px;">Este cliente YA mostró interés (IA, redes, mercado natural). Es tu ventaja. Úsala bien.</p>
+
+      <div class="alert cyan">
+        <span class="alert-icon">💡</span>
+        <div>
+          <strong>La ventaja:</strong> El cliente ya sabe que puede conseguir crédito. Ya dijo "quiero información". Tu trabajo es hacer fácil que diga "sí".
+        </div>
+      </div>
+
+      <h4 style="font-weight: 700; color: var(--brand); margin: 24px 0 12px;">Paso 1: Llama a la HORA PACTADA</h4>
+      <div style="background: #F9F7F3; border-left: 4px solid var(--gold); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+        <p style="font-size: 13px; color: var(--text);"><strong>No te retrases.</strong> El cliente acordó una hora específica. Si no llamas a esa hora, pierde credibilidad.</p>
+        <p style="font-size: 12px; color: var(--muted); margin-top: 8px;">Antes de llamar: revisa el CRM qué anotó la coordinadora sobre él.</p>
+      </div>
+
+      <h4 style="font-weight: 700; color: var(--brand); margin: 24px 0 12px;">Paso 2: Confirmación rápida</h4>
+      <div style="background: #F9F7F3; border-left: 4px solid var(--gold); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+        <p style="font-size: 13px; color: var(--text); margin-bottom: 8px;"><strong>Script:</strong></p>
+        <p style="font-size: 13px; color: var(--text);">"Hola [NOMBRE], soy [TÚ] de Credixpertos. ¿Te llamamos en un buen momento? Tengo las opciones de crédito que consultaste."</p>
+      </div>
+
+      <h4 style="font-weight: 700; color: var(--brand); margin: 24px 0 12px;">Paso 3: Muestra el valor rápido</h4>
+      <div style="background: #F9F7F3; border-left: 4px solid var(--gold); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+        <p style="font-size: 13px; color: var(--text); margin-bottom: 8px;"><strong>No hagas una presentación larga.</strong> El cliente ya sabe qué es Credixpertos.</p>
+        <p style="font-size: 13px; color: var(--text); margin-bottom: 8px;">"Vimos en tu perfil que [pagaduría]. Tenemos entidades que te ofrecen [monto] disponible en libranza."</p>
+        <p style="font-size: 12px; color: var(--muted);">Esto es concreto. No es venta, es información que él pidió.</p>
+      </div>
+
+      <h4 style="font-weight: 700; color: var(--brand); margin: 24px 0 12px;">Paso 4: Cierre de documentos</h4>
+      <div style="background: #F9F7F3; border-left: 4px solid var(--gold); padding: 16px; border-radius: 8px;">
+        <p style="font-size: 13px; color: var(--text); margin-bottom: 8px;"><strong>"¿Te interesa? Lo único que necesito es que me envíes cédula y desprendible para empezar."</strong></p>
+        <p style="font-size: 12px; color: var(--muted); margin-top: 8px;">Ese es tu cierre. No la oferta. Es que envíe documentos.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="oferta" style="display: none;">
+    <div class="card">
+      <h3 style="font-size: 18px; color: var(--brand); margin-bottom: 20px;">💰 Cómo Hacer Atractiva la Oferta</h3>
+      <p style="color: var(--muted); margin-bottom: 20px;">No vendas dinero. Vende soluciones. Hay diferencia.</p>
+
+      <div class="alert gold">
+        <span class="alert-icon">⚡</span>
+        <div>
+          <strong>La regla:</strong> El cliente no quiere un "crédito de $15M". Quiere "poder pagar el semestre de mi hijo sin que le cobren interés por atraso".
+        </div>
+      </div>
+
+      <h4 style="font-weight: 700; color: var(--brand); margin: 24px 0 12px;">El Triángulo de la Oferta</h4>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+        <div style="background: var(--cyan-light); border-left: 4px solid var(--cyan); padding: 16px; border-radius: 8px;">
+          <p style="font-weight: 700; color: var(--brand); margin-bottom: 8px;">💵 MONTO</p>
+          <p style="font-size: 13px; color: #0a5c6e;">¿Cuánto le oferto? $10M, $20M, $30M?</p>
+        </div>
+        <div style="background: var(--gold-light); border-left: 4px solid var(--gold); padding: 16px; border-radius: 8px;">
+          <p style="font-weight: 700; color: var(--brand); margin-bottom: 8px;">⏰ PLAZO</p>
+          <p style="font-size: 13px; color: var(--amber);">¿En cuántas cuotas? 36, 48, 60, 84?</p>
+        </div>
+        <div style="background: var(--green-bg); border-left: 4px solid var(--green); padding: 16px; border-radius: 8px;">
+          <p style="font-weight: 700; color: var(--brand); margin-bottom: 8px;">💲 CUOTA</p>
+          <p style="font-size: 13px; color: var(--green);">¿Cuánto paga mensual? (esto lo entienden mejor)</p>
+        </div>
+      </div>
+
+      <h4 style="font-weight: 700; color: var(--brand); margin: 24px 0 12px;">La Fórmula Correcta</h4>
+      <div style="background: #F9F7F3; border-left: 4px solid var(--gold); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+        <p style="font-size: 13px; color: var(--text); line-height: 1.8;">
+          <strong>❌ MAL:</strong> "Te ofrezco un crédito de $20M"<br><br>
+          <strong>✓ BIEN:</strong> "Con $20M en 60 cuotas, pagas $400k mensuales. ¿Eso entra en tu presupuesto?"<br><br>
+          <strong>✓ MEJOR:</strong> "Veo que necesitabas dinero para [X]. Con $20M a 60 cuotas te cabe en el presupuesto ($400k) y sigues viendo que es descuento de nómina."
+        </p>
+      </div>
+
+      <h4 style="font-weight: 700; color: var(--brand); margin: 24px 0 12px;">Comparativas que venden</h4>
+      <div style="background: #F9F7F3; border-left: 4px solid var(--gold); padding: 16px; border-radius: 8px;">
+        <p style="font-size: 13px; color: var(--text);"><strong>Si dice "es mucho":</strong></p>
+        <p style="font-size: 13px; color: var(--text); margin: 8px 0;">"¿Vs qué? ¿Vs un préstamo de un prestamista? Eso te cobra 10% mensual. Esto es descuento de nómina. Es seguro."</p>
+        <p style="font-size: 13px; color: var(--text); margin-top: 16px;"><strong>Si dice "muy largo plazo":</strong></p>
+        <p style="font-size: 13px; color: var(--text); margin: 8px 0;">"Perfecto. A 48 cuotas pagan $560k. ¿Eso sí te cuadra? O prefieres 60 cuotas que es $400k?"</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="objeciones" style="display: none;">
+    <div class="card">
+      <h3 style="font-size: 18px; color: var(--brand); margin-bottom: 20px;">⚡ Manejo de Objeciones</h3>
+      <p style="color: var(--muted); margin-bottom: 20px;">La objeción NO es "no". Es una pregunta que el cliente todavía tiene. Respóndela y sigue.</p>
+
+      <div class="alert cyan">
+        <span class="alert-icon">💡</span>
+        <div>
+          <strong>Mentalidad:</strong> Si dice "no" sin razón, repite preguntas. Si dice "no" CON razón, tiene un problema. Tu trabajo es resolver el problema, no insistir.
+        </div>
+      </div>
+
+      <div style="display: grid; gap: 16px;">
+        <!-- OBJECIÓN 1 -->
+        <div style="background: #F9F7F3; border-left: 4px solid var(--gold); padding: 16px; border-radius: 8px;">
+          <p style="font-weight: 700; color: var(--brand); margin-bottom: 12px;">📌 OBJECIÓN: "Es muy caro"</p>
+          <p style="font-size: 13px; color: var(--text); margin-bottom: 8px;"><strong>¿Por qué la dice?</strong> No entiende la cuota o la compara mal.</p>
+          <p style="font-size: 13px; color: var(--text); margin-bottom: 12px;"><strong>Tu respuesta:</strong></p>
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="font-size: 13px; color: var(--text); padding: 4px 0;">1. "¿Cuál es tu presupuesto? ¿Cuánto es lo máximo que puedes pagar?"</li>
+            <li style="font-size: 13px; color: var(--text); padding: 4px 0;">2. Ajusta el plazo: "A 84 cuotas pagan $280k. ¿Eso cabe?"</li>
+            <li style="font-size: 13px; color: var(--text); padding: 4px 0;">3. Si sigue siendo caro: "Vemos otras entidades con mejor tasa"</li>
+          </ul>
+        </div>
+
+        <!-- OBJECIÓN 2 -->
+        <div style="background: #F9F7F3; border-left: 4px solid var(--gold); padding: 16px; border-radius: 8px;">
+          <p style="font-weight: 700; color: var(--brand); margin-bottom: 12px;">📌 OBJECIÓN: "Estoy reportado/tengo mal historial"</p>
+          <p style="font-size: 13px; color: var(--text); margin-bottom: 8px;"><strong>¿Por qué?</strong> Cree que no le daremos crédito.</p>
+          <p style="font-size: 13px; color: var(--text); margin-bottom: 12px;"><strong>Tu respuesta:</strong></p>
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="font-size: 13px; color: var(--text); padding: 4px 0;">1. "Eso no es problema. Tenemos entidades que trabajan con reportes si el disponible es suficiente."</li>
+            <li style="font-size: 13px; color: var(--text); padding: 4px 0;">2. "Lo que ves en centrales no importa si tienes disponible de libranza. Es descuento de nómina."</li>
+            <li style="font-size: 13px; color: var(--text); padding: 4px 0;">3. "Una opción es que cumplas 2-3 meses sin atrasos y después hablamos de un monto mayor."</li>
+          </ul>
+        </div>
+
+        <!-- OBJECIÓN 3 -->
+        <div style="background: #F9F7F3; border-left: 4px solid var(--gold); padding: 16px; border-radius: 8px;">
+          <p style="font-weight: 700; color: var(--brand); margin-bottom: 12px;">📌 OBJECIÓN: "Me da desconfianza" / "No conozco la empresa"</p>
+          <p style="font-size: 13px; color: var(--text); margin-bottom: 8px;"><strong>¿Por qué?</strong> Hay muchas estafas de créditos. Es legítima la desconfianza.</p>
+          <p style="font-size: 13px; color: var(--text); margin-bottom: 12px;"><strong>Tu respuesta:</strong></p>
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="font-size: 13px; color: var(--text); padding: 4px 0;">1. "Credixpertos lleva [X] años en el mercado. Trabaja con bancos y financieras conocidas."</li>
+            <li style="font-size: 13px; color: var(--text); padding: 4px 0;">2. "El dinero no viene de mí, viene de la entidad [Bancolombia, Pichincha, etc]. Yo solo tramito."</li>
+            <li style="font-size: 13px; color: var(--text); padding: 4px 0;">3. "Si quieres, envías documentos y esperas a que la entidad apruebe. Sin costo, sin compromiso."</li>
+          </ul>
+        </div>
+
+        <!-- OBJECIÓN 4 -->
+        <div style="background: #F9F7F3; border-left: 4px solid var(--gold); padding: 16px; border-radius: 8px;">
+          <p style="font-weight: 700; color: var(--brand); margin-bottom: 12px;">📌 OBJECIÓN: "Ahora mismo no necesito" / "Déjame pensarlo"</p>
+          <p style="font-size: 13px; color: var(--text); margin-bottom: 8px;"><strong>¿Por qué?</strong> No ve la urgencia. O prefiere no decidir hoy.</p>
+          <p style="font-size: 13px; color: var(--text); margin-bottom: 12px;"><strong>Tu respuesta:</strong></p>
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="font-size: 13px; color: var(--text); padding: 4px 0;">1. "Perfecto. Pero es mejor tener la opción que no tenerla, ¿verdad?"</li>
+            <li style="font-size: 13px; color: var(--text); padding: 4px 0;">2. "¿En cuánto tiempo crees que SÍ lo necesites? ¿En 1 mes? ¿En 3 meses?"</li>
+            <li style="font-size: 13px; color: var(--text); padding: 4px 0;">3. "Mándame los documentos y cuando lo necesites, 24 horas y está listo."</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="retoma" style="display: none;">
+    <div class="card">
+      <h3 style="font-size: 18px; color: var(--brand); margin-bottom: 20px;">🔄 Retoma de Clientes</h3>
+      <p style="color: var(--muted); margin-bottom: 20px;">Tercera, cuarta, quinta oportunidad. El cliente que dijo "no" puede decir "sí" después. Las circunstancias cambian.</p>
+
+      <div class="alert cyan">
+        <span class="alert-icon">💡</span>
+        <div>
+          <strong>Dato importante:</strong> Un cliente que rechazó hace 2 meses puede necesitar dinero HOY. Las condiciones laborales cambian (aumento, bono, mejor disponible). Retómalo sin parecer desesperado.
+        </div>
+      </div>
+
+      <h4 style="font-weight: 700; color: var(--brand); margin: 24px 0 12px;">Tipos de Retoma</h4>
+
+      <div style="background: #F9F7F3; border-left: 4px solid var(--gold); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+        <p style="font-weight: 700; color: var(--brand); margin-bottom: 12px;">1️⃣ Retoma por mejora de condiciones</p>
+        <p style="font-size: 13px; color: var(--text);"><strong>Situación:</strong> Te dijo "no" porque disponible era poco. Pero ahora cambió de trabajo o recibió aumento.</p>
+        <p style="font-size: 13px; color: var(--text); margin-top: 8px;"><strong>Script:</strong> "Hola [NOMBRE], te llamaba porque revisé tu perfil y vimos que ya tienes más disponible de libranza. Ahora SÍ podemos ofrecerte $30M en vez de $15M que veíamos antes. ¿Te interesa?"</p>
+      </div>
+
+      <div style="background: #F9F7F3; border-left: 4px solid var(--gold); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+        <p style="font-weight: 700; color: var(--brand); margin-bottom: 12px;">2️⃣ Retoma por urgencia nueva</p>
+        <p style="font-size: 13px; color: var(--text);"><strong>Situación:</strong> Dijo "no" porque no necesitaba. Pero ahora sí necesita (reparación, educación, deuda).</p>
+        <p style="font-size: 13px; color: var(--text); margin-top: 8px;"><strong>Script:</strong> "Hola [NOMBRE], ¿cómo estás? Hacía rato no nos hablábamos. Te llamaba para saber si en estos meses cambió algo en tu situación. ¿Necesitas dinero para algo?"</p>
+      </div>
+
+      <div style="background: #F9F7F3; border-left: 4px solid var(--gold); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+        <p style="font-weight: 700; color: var(--brand); margin-bottom: 12px;">3️⃣ Retoma por mejor oferta</p>
+        <p style="font-size: 13px; color: var(--text);"><strong>Situación:</strong> Le ofreciste en una entidad cara. Pero ahora tienes una mejor tasa o mejor plazo.</p>
+        <p style="font-size: 13px; color: var(--text); margin-top: 8px;"><strong>Script:</strong> "Hola [NOMBRE], te llamaba porque tengo una opción mejor que la que te mostré hace 2 meses. Misma cantidad, pero con cuotas 30% más bajas. ¿Qué dices?"</p>
+      </div>
+
+      <h4 style="font-weight: 700; color: var(--brand); margin: 24px 0 12px;">Lo que NO debes hacer</h4>
+      <div style="background: var(--red-bg); border-left: 4px solid var(--red); padding: 16px; border-radius: 8px;">
+        <ul style="list-style: none; padding: 0; margin: 0;">
+          <li style="font-size: 13px; color: var(--red); padding: 8px 0;">❌ Aparecer desesperado. ("¿Por qué no me llamaste?", "¿Qué pasó contigo?")</li>
+          <li style="font-size: 13px; color: var(--red); padding: 8px 0;">❌ Culpar al cliente. ("Me dejaste colgado")</li>
+          <li style="font-size: 13px; color: var(--red); padding: 8px 0;">❌ Llamar más de 1 vez por semana. Parece acoso.</li>
+          <li style="font-size: 13px; color: var(--red); padding: 8px 0;">❌ Prometer cosas que no puedes cumplir.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="cierre" style="display: none;">
+    <div class="card">
+      <h3 style="font-size: 18px; color: var(--brand); margin-bottom: 20px;">✓ Tu Objetivo: DOCUMENTOS</h3>
+      <p style="color: var(--muted); margin-bottom: 20px;">Esta es la cosa más importante. Recuérdalo cada día.</p>
+
+      <div style="background: var(--green-bg); border: 2px solid var(--green); border-radius: 12px; padding: 24px; margin-bottom: 20px;">
+        <p style="font-size: 16px; font-weight: 700; color: var(--green); margin-bottom: 12px;">🎯 Tu ÚNICO objetivo como asesor es:</p>
+        <p style="font-size: 18px; font-weight: 900; color: var(--green); line-height: 1.4;">Que el cliente envíe<br>CÉDULA + DESPRENDIBLE</p>
+      </div>
+
+      <h4 style="font-weight: 700; color: var(--brand); margin: 20px 0 12px;">¿Qué NO es tu trabajo?</h4>
+      <div style="display: grid; gap: 12px; margin-bottom: 20px;">
+        <div style="background: var(--red-bg); border-left: 4px solid var(--red); padding: 12px; border-radius: 6px;">
+          <p style="font-size: 13px; color: var(--red);"><strong>❌ NO es tu trabajo radicar.</strong> Eso lo hace la analista.</p>
+        </div>
+        <div style="background: var(--red-bg); border-left: 4px solid var(--red); padding: 12px; border-radius: 6px;">
+          <p style="font-size: 13px; color: var(--red);"><strong>❌ NO es tu trabajo verificar si fue aprobado.</strong> La analista mantiene al cliente informado.</p>
+        </div>
+        <div style="background: var(--red-bg); border-left: 4px solid var(--red); padding: 12px; border-radius: 6px;">
+          <p style="font-size: 13px; color: var(--red);"><strong>❌ NO es tu trabajo hacer seguimiento de la entidad.</strong> La analista coordina con bancos.</p>
+        </div>
+        <div style="background: var(--red-bg); border-left: 4px solid var(--red); padding: 12px; border-radius: 6px;">
+          <p style="font-size: 13px; color: var(--red);"><strong>❌ NO es tu trabajo desembolsar.</strong> La entidad desembolsa automáticamente.</p>
+        </div>
+      </div>
+
+      <h4 style="font-weight: 700; color: var(--brand); margin: 20px 0 12px;">¿Cuándo TÚ "cierras"?</h4>
+      <div style="background: var(--green-bg); border-left: 4px solid var(--green); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+        <p style="font-size: 13px; color: var(--green); font-weight: 700; margin-bottom: 8px;">Cierre = Cliente dice "sí" + Envía documentos</p>
+        <p style="font-size: 13px; color: #166534;">Ejemplo: Cliente te envía por WhatsApp la cédula y desprendible. Ese es tu cierre. Apunta en CRM: "Documentos recibidos 15/04 17:30" y pasa al analista.</p>
+      </div>
+
+      <h4 style="font-weight: 700; color: var(--brand); margin: 20px 0 12px;">Después de tu cierre</h4>
+      <div style="background: #F9F7F3; border-left: 4px solid var(--gold); padding: 16px; border-radius: 8px;">
+        <p style="font-size: 13px; color: var(--text); margin-bottom: 12px;"><strong>Anotación en CRM (MISMO DÍA):</strong></p>
+        <p style="font-size: 12px; color: var(--text); background: white; border-left: 3px solid var(--gold); padding: 12px; border-radius: 6px; font-family: monospace;">
+          "15/04 - 5:30pm - Cliente [NOMBRE] confirmó interés en $25M a 60 cuotas. Envió cédula y desprendible por WhatsApp. Pasa a análisis. Contactado analista [NOMBRE] para revisar disponible y entidades."
+        </p>
+      </div>
+
+      <div class="alert cyan" style="margin-top: 24px;">
+        <span class="alert-icon">💡</span>
+        <div>
+          <strong>La verdad:</strong> Cuando el cliente tiene documentos, tu comisión está en la nómina (si radica y desembolsa). Pero tu métrica diaria es ESOS DOCUMENTOS. Cada cliente con documentos = TÚ conseguiste un interesado. Ese es tu cierre.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECCIÓN: CALCULADORA ===== -->
+<section class="section" id="calculadora">
+  <div class="page-header">
+    <div class="page-tag">Herramienta comercial</div>
+    <h1 class="page-title">Calculadora de <span style="color: var(--cyan);">Crédito</span></h1>
+    <p class="page-subtitle">Calcula cuotas en tiempo real durante las llamadas. El cliente ve exactamente cuánto paga. Transforma números en dinero.</p>
+  </div>
+
+  <div class="card">
+    <iframe src="index__1_.html" style="width: 100%; height: 1200px; border: none; border-radius: 12px;" title="Calculadora de Crédito"></iframe>
+  </div>
+</section>
+
+</main>
+
+</div>
+
+<script>
+function switchSection(section) {
+  // Ocultar todas las secciones
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  // Mostrar la sección seleccionada
+  document.getElementById(section).classList.add('active');
+  
+  // Actualizar sidebar
+  document.querySelectorAll('.sidebar-menu li').forEach(li => li.classList.remove('active'));
+  document.querySelector(`[data-section="${section}"]`).classList.add('active');
+  
+  // Scroll al top
+  window.scrollTo(0, 0);
+}
+
+function switchTab(tabId, btn) {
+  // Ocultar todos los tabs
+  document.querySelectorAll('[id^="tab-"]').forEach(tab => {
+    tab.style.display = 'none';
+  });
+  // Mostrar el tab seleccionado
+  document.getElementById(tabId).style.display = 'block';
+  
+  // Actualizar botones
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function switchCartilla(section, btn) {
+  // Ocultar todos
+  document.querySelectorAll('[id^="contacto-frio"], [id^="contacto-precalificado"], [id^="oferta"], [id^="objeciones"], [id^="retoma"], [id^="cierre"]').forEach(el => {
+    el.style.display = 'none';
+  });
+  // Mostrar seleccionado
+  document.getElementById(section).style.display = 'block';
+  
+  // Update buttons - get all cartilla tab buttons
+  const cartillaSection = document.getElementById('cartilla');
+  cartillaSection.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>
+
+</body>
+</html>
