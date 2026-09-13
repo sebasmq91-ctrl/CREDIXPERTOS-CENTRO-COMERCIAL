@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CREDIXPERTOS - Centro Comercial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --brand: #00bcd4;
+            --brand-light: #00acc1;
+            --cyan: #00bcd4;
+            --gold: #ffc107;
+            --red: #e74c3c;
+            --green: #27ae60;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --bg-light: #f5f7fa;
+            --border: #ecf0f1;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #fff;
+            color: var(--text-dark);
+            display: flex;
+            height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
+            color: white;
+            padding: 30px 20px;
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 10px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .sidebar-header img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .sidebar-header h1 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .sidebar-section {
+            margin-bottom: 25px;
+        }
+
+        .sidebar-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-button {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        .nav-button.active {
+            background: rgba(255,255,255,0.25);
+            border-color: rgba(255,255,255,0.5);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        /* CONTENIDO PRINCIPAL */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            overflow-y: auto;
+            padding: 0;
+            background: #f5f7fa;
+        }
+
+        .module {
+            display: none;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .module.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .module h2 {
+            color: var(--brand);
+            margin-bottom: 20px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        /* IFRAME CONTAINER */
+        .iframe-container {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            height: 85vh;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* KPI DISPLAY */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .kpi-card {
+            background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .kpi-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .kpi-value {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        /* HEADER */
+        .module-header {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .module-header p {
+            color: var(--text-light);
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .logo-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .logo-header img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+
+        .logo-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .tagline {
+            color: var(--cyan);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--brand);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--brand-light);
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <img src="https://sebasmq91-ctrl.github.io/CREDIXPERTOS-CENTRO-COMERCIAL/logo.png" alt="Credixpertos">
+            <h1>CREDIXPERTOS</h1>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">📊 OPERACIONES</div>
+            <button class="nav-button active" onclick="showModule('inicio')">Inicio</button>
+            <button class="nav-button" onclick="showModule('metas')">Mis Metas (KPIs)</button>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">📚 HERRAMIENTAS</div>
+            <button class="nav-button" onclick="showModule('politicas')">Políticas & Entidades</button>
+            <button class="nav-button" onclick="showModule('cartilla')">Cartilla del Asesor</button>
+            <button class="nav-button" onclick="showModule('manual')">Manual Operativo</button>
+            <button class="nav-button" onclick="showModule('proceso')">Proceso</button>
+            <button class="nav-button" onclick="showModule('calculadora')">Calculadora</button>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">⚙️ CONFIGURACIÓN</div>
+            <button class="nav-button" onclick="showModule('admin')">Panel Admin</button>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="main-content">
+        <!-- INICIO -->
+        <div class="module active" id="inicio">
+            <div class="module-header">
+                <div class="logo-header">
+                    <img src="https://sebasmq91-ctrl.github.io/CREDIXPERTOS-CENTRO-COMERCIAL/logo.png" alt="Credixpertos">
+                    <div>
+                        <h2>CREDIXPERTOS</h2>
+                        <p class="tagline">más que un crédito, una solución</p>
+                    </div>
+                </div>
+                <p><strong>Hub integrado de herramientas, políticas y procesos para el equipo comercial.</strong></p>
+                <p>GitHub Pages: <code>https://sebasmq91-ctrl.github.io/CREDIXPERTOS-CENTRO-COMERCIAL/</code></p>
+            </div>
+            
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Llamadas Realizadas (Hoy)</div>
+                    <div class="kpi-value" id="kpi-llamadas">0</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Documentos Recolectados (Hoy)</div>
+                    <div class="kpi-value" id="kpi-docs">0</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Radicaciones (Mes)</div>
+                    <div class="kpi-value" id="kpi-radicaciones">0</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Desembolsos (Mes)</div>
+                    <div class="kpi-value" id="kpi-desembolsos">0</div>
+                </div>
+            </div>
+
+            <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                <h3 style="color: var(--brand); margin-bottom: 20px;">📋 Módulos disponibles</h3>
+                <p style="color: var(--text-light); margin-bottom: 15px;">Selecciona cualquier herramienta en la barra lateral izquierda:</p>
+                <ul style="margin-left: 20px; color: var(--text-light); line-height: 2;">
+                    <li><strong>Mis Metas:</strong> Dashboard de KPIs en tiempo real</li>
+                    <li><strong>Políticas & Entidades:</strong> Todas las entidades, tasas y políticas de crédito</li>
+                    <li><strong>Cartilla del Asesor:</strong> Guiones de venta, técnicas, objeciones (ACTUALIZADA con Llamada en Frío)</li>
+                    <li><strong>Manual Operativo:</strong> Procedimientos y flujos operacionales</li>
+                    <li><strong>Proceso:</strong> Mapa interactivo del flujo lead → desembolso</li>
+                    <li><strong>Calculadora:</strong> Herramienta para simular créditos</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- MIS METAS -->
+        <div class="module" id="metas">
+            <h2>📊 Mis Metas (KPIs)</h2>
+            <div class="module-header">
+                <p>Dashboard en tiempo real. Los datos se guardan en localStorage.</p>
+            </div>
+
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Llamadas Realizadas (Hoy)</div>
+                    <div class="kpi-value" id="display-llamadas">0</div>
+                    <input type="number" id="input-llamadas" style="margin-top: 10px; width: 100%; padding: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white; border-radius: 4px;" placeholder="Número">
+                    <button onclick="saveKPI('llamadas')" style="margin-top: 8px; width: 100%; padding: 8px; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">Actualizar</button>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-label">Documentos Recolectados (Hoy)</div>
+                    <div class="kpi-value" id="display-docs">0</div>
+                    <input type="number" id="input-docs" style="margin-top: 10px; width: 100%; padding: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white; border-radius: 4px;" placeholder="Número">
+                    <button onclick="saveKPI('docs')" style="margin-top: 8px; width: 100%; padding: 8px; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">Actualizar</button>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-label">Radicaciones (Mes)</div>
+                    <div class="kpi-value" id="display-radicaciones">0</div>
+                    <input type="number" id="input-radicaciones" style="margin-top: 10px; width: 100%; padding: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white; border-radius: 4px;" placeholder="Número">
+                    <button onclick="saveKPI('radicaciones')" style="margin-top: 8px; width: 100%; padding: 8px; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">Actualizar</button>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-label">Desembolsos (Mes)</div>
+                    <div class="kpi-value" id="display-desembolsos">0</div>
+                    <input type="number" id="input-desembolsos" style="margin-top: 10px; width: 100%; padding: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white; border-radius: 4px;" placeholder="Número">
+                    <button onclick="saveKPI('desembolsos')" style="margin-top: 8px; width: 100%; padding: 8px; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">Actualizar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- POLÍTICAS & ENTIDADES (iframe) -->
+        <div class="module" id="politicas">
+            <h2>📋 Políticas & Entidades</h2>
+            <div class="iframe-container">
+                <iframe src="https://sebasmq91-ctrl.github.io/CREDIXPERTOS-CENTRO-COMERCIAL/credixpertos_tool.html"></iframe>
+            </div>
+        </div>
+
+        <!-- CARTILLA (iframe) -->
+        <div class="module" id="cartilla">
+            <h2>📚 Cartilla del Asesor</h2>
+            <div style="background: #e7f8ff; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--cyan);">
+                <strong style="color: #00695c;">✨ ACTUALIZADO:</strong> Nuevo tab "Llamada en Frío" con guion optimizado para pensionados y docentes (2 minutos de llamada).
+            </div>
+            <div class="iframe-container">
+                <iframe src="https://sebasmq91-ctrl.github.io/CREDIXPERTOS-CENTRO-COMERCIAL/cartilla_asesor.html"></iframe>
+            </div>
+        </div>
+
+        <!-- MANUAL (iframe) -->
+        <div class="module" id="manual">
+            <h2>📖 Manual Operativo</h2>
+            <div class="iframe-container">
+                <iframe src="https://sebasmq91-ctrl.github.io/CREDIXPERTOS-CENTRO-COMERCIAL/manual_operativo.html"></iframe>
+            </div>
+        </div>
+
+        <!-- PROCESO (iframe) -->
+        <div class="module" id="proceso">
+            <h2>🔄 Proceso</h2>
+            <div class="iframe-container">
+                <iframe src="https://sebasmq91-ctrl.github.io/CREDIXPERTOS-CENTRO-COMERCIAL/proceso.html"></iframe>
+            </div>
+        </div>
+
+        <!-- CALCULADORA (iframe) -->
+        <div class="module" id="calculadora">
+            <h2>🧮 Calculadora de Crédito</h2>
+            <div class="iframe-container">
+                <iframe src="https://sebasmq91-ctrl.github.io/CREDIXPERTOS-CENTRO-COMERCIAL/calculadora.html"></iframe>
+            </div>
+        </div>
+
+        <!-- PANEL ADMIN -->
+        <div class="module" id="admin">
+            <h2>⚙️ Panel Admin</h2>
+            
+            <div style="background: #fff3cd; padding: 20px; border-radius: 8px; border-left: 4px solid var(--gold); margin-bottom: 20px;">
+                <h3 style="color: #856404; margin-bottom: 15px;">ℹ️ Información</h3>
+                <p style="color: #666; margin-bottom: 10px;">Los datos de KPIs se guardan en localStorage del navegador.</p>
+                <p style="color: #666; margin-bottom: 10px;">Para actualizar URLs de iframes o agregar nuevas herramientas, edita este archivo HTML directamente.</p>
+                <p style="color: #666;"><strong>Cartilla actualizada:</strong> Ahora incluye el tab "Llamada en Frío" con guion optimizado.</p>
+            </div>
+
+            <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                <h3 style="color: var(--brand); margin-bottom: 15px;">📞 Guion optimizado agregado</h3>
+                <p style="color: var(--text-light); margin-bottom: 10px;"><strong>Presentación → Gancho → Propuesta + Urgencia → Aclaración → 3 Preguntas → Cierre en WhatsApp (Con Tech / Sin Tech) → Plantilla WhatsApp → 3 Ganchos opcionales</strong></p>
+                <p style="color: var(--text-light);"><strong>Tiempo total:</strong> ~2 minutos de llamada | <strong>Objetivo:</strong> Recolectar documentación, no vender el crédito directamente</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // FUNCIONES DE NAVEGACIÓN
+        function showModule(moduleName) {
+            const modules = document.querySelectorAll('.module');
+            modules.forEach(m => m.classList.remove('active'));
+            
+            document.getElementById(moduleName).classList.add('active');
+            
+            const buttons = document.querySelectorAll('.nav-button');
+            buttons.forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (moduleName === 'metas') loadKPIs();
+            if (moduleName === 'inicio') loadKPIsDisplay();
+        }
+
+        // FUNCIONES KPI
+        function loadKPIs() {
+            const data = JSON.parse(localStorage.getItem('credix_kpis') || '{"llamadas":0,"docs":0,"radicaciones":0,"desembolsos":0}');
+            document.getElementById('input-llamadas').value = data.llamadas;
+            document.getElementById('input-docs').value = data.docs;
+            document.getElementById('input-radicaciones').value = data.radicaciones;
+            document.getElementById('input-desembolsos').value = data.desembolsos;
+            updateKPIDisplay();
+        }
+
+        function loadKPIsDisplay() {
+            const data = JSON.parse(localStorage.getItem('credix_kpis') || '{"llamadas":0,"docs":0,"radicaciones":0,"desembolsos":0}');
+            document.getElementById('kpi-llamadas').textContent = data.llamadas;
+            document.getElementById('kpi-docs').textContent = data.docs;
+            document.getElementById('kpi-radicaciones').textContent = data.radicaciones;
+            document.getElementById('kpi-desembolsos').textContent = data.desembolsos;
+        }
+
+        function updateKPIDisplay() {
+            const data = JSON.parse(localStorage.getItem('credix_kpis') || '{"llamadas":0,"docs":0,"radicaciones":0,"desembolsos":0}');
+            document.getElementById('display-llamadas').textContent = data.llamadas;
+            document.getElementById('display-docs').textContent = data.docs;
+            document.getElementById('display-radicaciones').textContent = data.radicaciones;
+            document.getElementById('display-desembolsos').textContent = data.desembolsos;
+        }
+
+        function saveKPI(type) {
+            const data = JSON.parse(localStorage.getItem('credix_kpis') || '{"llamadas":0,"docs":0,"radicaciones":0,"desembolsos":0}');
+            const inputId = `input-${type}`;
+            data[type] = parseInt(document.getElementById(inputId).value) || 0;
+            localStorage.setItem('credix_kpis', JSON.stringify(data));
+            updateKPIDisplay();
+            alert('KPI actualizado ✅');
+        }
+
+        // INICIALIZAR
+        document.addEventListener('DOMContentLoaded', function() {
+            loadKPIsDisplay();
+        });
+    </script>
+</body>
+</html>
