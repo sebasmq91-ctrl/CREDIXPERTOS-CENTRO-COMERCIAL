@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credixpertos · Mapa Interactivo del Proceso</title>
+<style>
+:root{
+  --navy:#0A2540; --navy2:#1a3d5c; --cyan:#00B4C8; --cyan-light:#E6F8FA;
+  --gold:#C9922A; --gold-light:#FEF3C7; --green:#166534; --green-bg:#DCFCE7;
+  --purple:#7B3F9E; --purple-light:#F1ECFE; --red:#991B1B; --red-bg:#FEE2E2;
+  --grey:#4B5563; --grey-light:#F3F4F6; --cream:#F8F6F1; --border:#E2D9CF; --muted:#6B7280;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:'DM Sans',-apple-system,Segoe UI,sans-serif;background:#EEF1F6;color:#1C1C2E;}
+.wrap{display:flex;min-height:100vh;}
+.main{flex:1;padding:24px 26px;max-width:calc(100% - 420px);}
+.panel{
+  width:420px;flex-shrink:0;background:white;border-left:1px solid var(--border);
+  padding:26px 24px;position:sticky;top:0;height:100vh;overflow-y:auto;
+}
+.header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:white;padding:18px 26px;border-radius:14px;margin-bottom:16px;}
+.header h1{margin:0 0 4px;font-size:21px;font-weight:700;}
+.header p{margin:0;font-size:11.5px;color:rgba(255,255,255,0.65);}
+
+.lane{display:flex;align-items:stretch;margin-bottom:8px;background:white;border-radius:12px;border:1px solid var(--border);overflow:hidden;}
+.lane-label{width:118px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;padding:10px 8px;text-align:center;font-weight:700;font-size:11px;line-height:1.3;}
+.lane-label .icon{font-size:20px;margin-bottom:4px;}
+.lane-body{flex:1;display:flex;align-items:center;padding:14px 16px;gap:10px;flex-wrap:wrap;}
+
+.step{
+  background:#FCFBF9;border:2px solid var(--border);border-radius:10px;padding:11px 13px;
+  font-size:11.5px;font-weight:600;line-height:1.3;min-width:118px;max-width:140px;text-align:center;
+  cursor:pointer;transition:.15s;position:relative;
+}
+.step:hover{border-color:var(--cyan);box-shadow:0 4px 14px -6px rgba(0,180,200,0.4);transform:translateY(-1px);}
+.step.selected{border-color:var(--navy);box-shadow:0 0 0 3px rgba(10,37,64,0.15);}
+.step.start{border-radius:30px;background:var(--green-bg);border-color:#86EFAC;color:var(--green);}
+.step.decision{background:var(--gold-light);border-color:#FCD34D;color:#92400E;}
+.step.decision::after{content:'⚡';position:absolute;top:-9px;right:-9px;background:var(--gold);color:white;border-radius:50%;width:20px;height:20px;font-size:10px;display:flex;align-items:center;justify-content:center;}
+.step.end{border-radius:30px;background:var(--navy);border-color:var(--navy);color:white;}
+
+.arrow{flex-shrink:0;color:var(--gold);font-size:18px;font-weight:700;}
+.handoff{
+  flex-shrink:0;background:#F3F4F6;border:2px dashed #9CA3AF;border-radius:20px;padding:9px 16px;
+  font-size:10.5px;font-weight:700;color:#374151;text-align:center;min-width:120px;
+}
+.conn-row{display:flex;align-items:center;padding-left:118px;height:16px;}
+.conn-row .down{color:var(--muted);font-size:14px;margin-left:34px;}
+
+.lane-canal .lane-label{background:linear-gradient(135deg,#166534,#1e7d42);}
+.lane-asesor .lane-label{background:linear-gradient(135deg,#00838F,#00B4C8);}
+.lane-analista .lane-label{background:linear-gradient(135deg,#7B3F9E,#9C4FC9);}
+.lane-sistemas .lane-label{background:linear-gradient(135deg,#374151,#4B5563);}
+.lane-gerencia .lane-label{background:linear-gradient(135deg,#0A2540,#1a3d5c);}
+
+.legend{display:flex;gap:20px;margin-top:12px;padding:11px 18px;background:white;border:1px solid var(--border);border-radius:12px;font-size:11px;align-items:center;flex-wrap:wrap;}
+.legend b{font-size:11px;color:var(--navy);margin-right:2px;}
+.leg-item{display:flex;align-items:center;gap:6px;}
+.leg-box{width:18px;height:13px;border-radius:4px;flex-shrink:0;}
+
+/* PANEL DE DETALLE */
+.panel-empty{color:var(--muted);font-size:13px;text-align:center;margin-top:80px;line-height:1.6;}
+.panel-empty .big{font-size:34px;margin-bottom:10px;}
+.p-tag{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--cyan);margin-bottom:6px;}
+.p-title{font-family:Georgia,serif;font-size:20px;color:var(--navy);margin:0 0 4px;font-weight:400;line-height:1.25;}
+.p-resp{display:inline-block;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:16px;}
+.p-section{margin-bottom:18px;}
+.p-section h4{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin:0 0 8px;font-weight:700;}
+.p-desc{font-size:13px;line-height:1.65;color:#1C1C2E;}
+.p-tool{background:var(--purple-light);border-radius:10px;padding:10px 13px;margin-bottom:8px;font-size:12.5px;line-height:1.5;}
+.p-tool b{color:#4C2E9E;display:block;font-size:11.5px;margin-bottom:2px;}
+.p-metric{background:var(--cream);border-left:3px solid var(--gold);border-radius:6px;padding:8px 12px;margin-bottom:6px;font-size:12px;line-height:1.5;}
+.p-decision{border:2px dashed #FCD34D;border-radius:12px;padding:14px;background:var(--gold-light);}
+.p-branch{border-radius:10px;padding:11px 13px;margin-bottom:8px;font-size:12.5px;line-height:1.5;cursor:pointer;transition:.15s;}
+.p-branch:hover{transform:translateX(3px);}
+.p-branch.si{background:var(--green-bg);border:1.5px solid #86EFAC;}
+.p-branch.no{background:var(--red-bg);border:1.5px solid #FCA5A5;}
+.p-branch b{display:block;font-size:11.5px;margin-bottom:3px;}
+.p-branch .goto{font-size:10.5px;font-weight:700;margin-top:6px;opacity:.75;}
+.p-next{background:var(--cyan-light);border-radius:10px;padding:11px 13px;font-size:12.5px;cursor:pointer;transition:.15s;}
+.p-next:hover{transform:translateX(3px);}
+.p-next b{display:block;color:#0a5c6e;font-size:11px;text-transform:uppercase;margin-bottom:3px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="main">
+
+  <div class="header">
+    <h1>Credixpertos — Mapa Interactivo del Proceso</h1>
+    <p>Dale clic a cualquier paso para ver exactamente qué pasa ahí — quién lo hace, con qué herramienta, y qué sigue.</p>
+  </div>
+  <!-- CARRIL 1: CANAL DE ENTRADA -->
+  <div class="lane lane-canal">
+    <div class="lane-label"><div class="icon">📥</div>Canal de<br>Entrada</div>
+    <div class="lane-body">
+      <div data-node="inicio" class="step start" onclick="mostrar('inicio')">Lead ingresa</div>
+      <div class="arrow">→</div>
+      <div data-node="mercado_natural" class="step" onclick="mostrar('mercado_natural')">Mercado<br>Natural</div>
+      <div class="arrow">/</div>
+      <div data-node="ia_campana" class="step" onclick="mostrar('ia_campana')">IA · Campaña</div>
+    </div>
+  </div>
+
+  <div class="conn-row"><div class="down">↓</div></div>
+
+  <!-- CARRIL 2: ASESOR -->
+  <div class="lane lane-asesor">
+    <div class="lane-label"><div class="icon">🧑‍💼</div>Asesor<br>Interno / Externo</div>
+    <div class="lane-body">
+      <div data-node="contacta" class="step" onclick="mostrar('contacta')">Gestión de llamadas<br>y recibe documentos</div>
+      <div class="arrow">→</div>
+      <div data-node="envia_consulta" class="step" onclick="mostrar('envia_consulta')">Envía por CRM a<br>Estado de Consulta</div>
+      <div class="handoff" onclick="mostrar('analiza_entidades')">🔁 pasa a<br>Analista</div>
+      <div class="arrow">→</div>
+      <div data-node="cierra_cliente" class="step" onclick="mostrar('cierra_cliente')">Recibe la oferta y<br>cierra al cliente</div>
+      <div class="arrow">→</div>
+      <div data-node="cliente_acepta" class="step decision" onclick="mostrar('cliente_acepta')">¿Cliente<br>acepta?</div>
+      <div class="handoff" onclick="mostrar('radica_entidad')">🔁 pasa a<br>Analista</div>
+      <div class="arrow">→</div>
+      <div data-node="desembolsa" class="step start" onclick="mostrar('desembolsa')">Cliente<br>desembolsa</div>
+    </div>
+  </div>
+
+  <div class="conn-row"><div class="down">↕</div></div>
+
+  <!-- CARRIL 3: ANALISTA -->
+  <div class="lane lane-analista">
+    <div class="lane-label"><div class="icon">📋</div>Analista<br>Operativa</div>
+    <div class="lane-body">
+      <div data-node="recibe_consulta" class="step" onclick="mostrar('recibe_consulta')">Recibe caso en<br>Estado de Consulta</div>
+      <div class="arrow">→</div>
+      <div data-node="analiza_entidades" class="step" onclick="mostrar('analiza_entidades')">Analiza por entidad<br>y descifra la oferta</div>
+      <div class="arrow">→</div>
+      <div data-node="hay_oferta" class="step decision" onclick="mostrar('hay_oferta')">¿Hay oferta<br>viable?</div>
+      <div class="handoff" onclick="mostrar('cierra_cliente')">🔁 transmite<br>al Asesor</div>
+      <div class="arrow">→</div>
+      <div data-node="radica_entidad" class="step" onclick="mostrar('radica_entidad')">Radica en<br>la entidad</div>
+      <div class="arrow">→</div>
+      <div data-node="hay_devolucion" class="step decision" onclick="mostrar('hay_devolucion')">¿Hubo<br>devolución?</div>
+      <div class="arrow">→</div>
+      <div data-node="seguimiento_credito" class="step" onclick="mostrar('seguimiento_credito')">Seguimiento<br>hasta desembolso</div>
+      <div class="arrow">→</div>
+      <div data-node="reporte_viernes" class="step" onclick="mostrar('reporte_viernes')">Reporta cada<br>viernes</div>
+    </div>
+  </div>
+
+  <div class="conn-row"><div class="down">↓</div></div>
+
+  <!-- CARRIL 4: SISTEMAS -->
+  <div class="lane lane-sistemas">
+    <div class="lane-label"><div class="icon">⚙️</div>Sistemas<br>CRM → API → Cierres</div>
+    <div class="lane-body">
+      <div data-node="crm_marca" class="step" onclick="mostrar('crm_marca')">CRM marca<br>desembolsado</div>
+      <div class="arrow">→</div>
+      <div data-node="api" class="step decision" onclick="mostrar('api')">API envía<br>a Cierres</div>
+      <div class="arrow">→</div>
+      <div data-node="cierres_calcula" class="step" onclick="mostrar('cierres_calcula')">Cierres calcula<br>comisión</div>
+      <div class="arrow">→</div>
+      <div data-node="cuenta_pago" class="step" onclick="mostrar('cuenta_pago')">Genera cuenta<br>de pago</div>
+    </div>
+  </div>
+
+  <div class="conn-row"><div class="down">↓</div></div>
+
+  <!-- CARRIL 5: GERENCIA -->
+  <div class="lane lane-gerencia">
+    <div class="lane-label"><div class="icon">👔</div>Gerencia<br>Comercial</div>
+    <div class="lane-body">
+      <div data-node="revisa_cierres" class="step" onclick="mostrar('revisa_cierres')">Revisa<br>Cierres</div>
+      <div class="arrow">→</div>
+      <div data-node="aprueba_pago" class="step" onclick="mostrar('aprueba_pago')">Aprueba y<br>paga</div>
+      <div class="arrow">→</div>
+      <div data-node="define_metas" class="step" onclick="mostrar('define_metas')">Define metas<br>y políticas</div>
+      <div class="arrow">→</div>
+      <div data-node="fin_ciclo" class="step end" onclick="mostrar('fin_ciclo')">Ciclo<br>completado</div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <b>Leyenda:</b>
+    <div class="leg-item"><div class="leg-box" style="background:#DCFCE7;border:1.5px solid #86EFAC"></div>Inicio/evento</div>
+    <div class="leg-item"><div class="leg-box" style="background:#FCFBF9;border:1.5px solid #D8CFC0"></div>Tarea</div>
+    <div class="leg-item"><div class="leg-box" style="background:#FEF3C7;border:1.5px solid #FCD34D"></div>⚡ Decisión</div>
+    <div class="leg-item"><div class="leg-box" style="background:#0A2540;border:1.5px solid #0A2540"></div>Fin</div>
+    <div class="leg-item" style="margin-left:auto;color:#6B7280">💡 Todas las cajas son clicables — pruébalo</div>
+  </div>
+
+</div>
+<div class="panel" id="panel">
+  <div class="panel-empty">
+    <div class="big">👈</div>
+    Dale clic a cualquier paso del mapa<br>para ver el detalle completo aquí.
+  </div>
+</div>
+</div>
+<script>
+const NODES = {
+
+inicio: {
+  tag:'Canal de Entrada · Evento de inicio', resp:'Sistema / Marketing', respColor:'#DCFCE7,#166534',
+  desc:'Un cliente potencial entra al embudo de Credixpertos por uno de dos caminos: lo trae el propio asesor (mercado natural) o llega por una campaña paga que la empresa gestiona (IA / Meta Ads). Este origen queda registrado desde el primer contacto porque determina condiciones distintas más adelante — comisión, y en el sistema de puntos, un bono adicional.',
+  siguientes:[{texto:'Camino 1 — Mercado Natural', goto:'mercado_natural'},{texto:'Camino 2 — IA / Campaña', goto:'ia_campana'}]
+},
+mercado_natural: {
+  tag:'Canal de Entrada', resp:'Asesor', respColor:'#E6F8FA,#0a5c6e',
+  desc:'El asesor consigue el cliente por su cuenta — familiares, conocidos, referidos, contactos de gestiones anteriores — sin que Credixpertos haya invertido en publicidad para llegar a esa persona.',
+  metricas:['Por qué importa: la comisión de mercado natural es más alta para el asesor (60% para él, 40% para la empresa). En el sistema de puntos del asesor interno, un crédito de mercado natural recibe un porcentaje extra de puntos sobre lo que le correspondería normalmente.'],
+  siguiente:{texto:'El asesor contacta y sondea la necesidad', goto:'contacta'}
+},
+ia_campana: {
+  tag:'Canal de Entrada', resp:'Marketing / Asesor', respColor:'#E6F8FA,#0a5c6e',
+  desc:'El lead llega por publicidad paga que gestiona Credixpertos (Meta Ads, campañas digitales). La empresa asumió el costo de conseguir ese contacto, y luego se asigna a un asesor para que lo trabaje.',
+  metricas:['La comisión en este caso es menor para el asesor, ya que Credixpertos ya invirtió en traer al cliente.'],
+  siguiente:{texto:'El asesor contacta y sondea la necesidad', goto:'contacta'}
+},
+contacta: {
+  tag:'Asesor · Tarea', resp:'Asesor (Interno o Externo)', respColor:'#E6F8FA,#0a5c6e',
+  desc:'El asesor hace toda la gestión de llamadas — contacta al cliente, sondea su necesidad, confirma que sea pensionado, docente o empleado según los perfiles que maneja Credixpertos. Su objetivo principal en esta etapa es recibir la documentación completa del cliente. También va anotando en el CRM cualquier comentario relevante que el cliente le diga (ej. con qué banco ya tiene un crédito, cuánto le queda de deuda, qué tanto le urge) — esos comentarios los va a usar la analista después.',
+  herramientas:[
+    {n:'CifraCRM', d:'Registra cada llamada, su resultado, y los comentarios del cliente que le sirvan a la analista más adelante.'}
+  ],
+  metricas:['Llamadas realizadas — mínimo 60/día, meta 80/día','Clientes con documentación — mínimo 6/día, meta 10/día'],
+  siguiente:{texto:'Envía el caso completo al Estado de Consulta', goto:'envia_consulta'}
+},
+envia_consulta: {
+  tag:'Asesor · Tarea', resp:'Asesor', respColor:'#E6F8FA,#0a5c6e',
+  desc:'Con la documentación ya completa, el asesor envía el caso por CifraCRM — todos los datos del cliente, los documentos, y sus comentarios — y lo mueve al "Estado de Consulta". Este es el punto exacto donde el caso deja de ser responsabilidad del asesor y pasa a la analista. El asesor NO decide a qué entidad va ni radica directamente — eso lo hace la analista en el siguiente paso.',
+  herramientas:[{n:'CifraCRM', d:'El estado del caso cambia a "Consulta" — así la analista sabe que ahí hay un caso nuevo esperando su análisis.'}],
+  metricas:['Radicaciones nuevas — mínimo 3/día, meta 5/día (se cuenta desde aquí, aunque la radicación formal la haga la analista después)'],
+  siguiente:{texto:'La analista recibe el caso en Estado de Consulta', goto:'recibe_consulta'}
+},
+recibe_consulta: {
+  tag:'Analista · Tarea', resp:'Analista Operativa de Crédito', respColor:'#F1ECFE,#4C2E9E',
+  desc:'La analista recibe el caso en Estado de Consulta y lee los comentarios que el asesor dejó sobre lo que el cliente contó — esa información le ayuda a decidir mejor por dónde empezar el análisis.',
+  herramientas:[{n:'CifraCRM', d:'Ahí le llegan todos los casos en consulta de todo el equipo de asesores, no solo de uno.'}],
+  metricas:['No gestiona llamadas — su rol es 100% análisis y radicación formal'],
+  siguiente:{texto:'Analiza el caso entidad por entidad', goto:'analiza_entidades'}
+},
+analiza_entidades: {
+  tag:'Analista · Tarea experta', resp:'Analista', respColor:'#F1ECFE,#4C2E9E',
+  desc:'Este es el corazón del trabajo de la analista: con el perfil del cliente y las entidades que maneja Credixpertos, ella descifra cuál es la mejor oferta posible — no solo cuál entidad aprobaría, sino cuál le conviene más al cliente (mejor tasa, mejor plazo, menor cuota).',
+  herramientas:[
+    {n:'Fichas Técnicas por entidad', d:'Ahí están las políticas, documentos y condiciones exactas de cada banco y financiera — la base de su análisis.'},
+    {n:'Ruteo por Pagaduría', d:'Le indica qué entidades trabajan bien con la pagaduría específica de ese cliente (Colpensiones, FOPEP, CASUR, etc.)'}
+  ],
+  siguiente:{texto:'Determina si encontró una oferta viable', goto:'hay_oferta'}
+},
+hay_oferta: {
+  tag:'Analista · Punto de decisión', resp:'Analista', respColor:'#F1ECFE,#4C2E9E',
+  desc:'Con el análisis hecho, la analista concluye si existe o no una oferta real para ese cliente entre las entidades de Credixpertos.',
+  decision:{
+    pregunta:'¿Encontró una oferta viable en alguna entidad?',
+    si:{texto:'Transmite la oferta al asesor call center — tasa, monto, condiciones — para que la presente al cliente.', goto:'cierra_cliente'},
+    no:{texto:'Informa al asesor que no hay oferta viable con el perfil actual del cliente. El caso se cierra o se guarda para revisar si la situación del cliente cambia más adelante.', goto:null}
+  }
+},
+cierra_cliente: {
+  tag:'Asesor · Tarea', resp:'Asesor', respColor:'#E6F8FA,#0a5c6e',
+  desc:'El asesor recibe la oferta ya definida por la analista y se la presenta al cliente — este es el momento de cierre real de la venta, donde resuelve dudas y objeciones para que el cliente confirme que sí quiere el crédito en esas condiciones.',
+  siguiente:{texto:'Se confirma si el cliente acepta', goto:'cliente_acepta'}
+},
+cliente_acepta: {
+  tag:'Asesor · Punto de decisión', resp:'Asesor', respColor:'#E6F8FA,#0a5c6e',
+  decision:{
+    pregunta:'¿El cliente acepta la oferta presentada?',
+    si:{texto:'El caso pasa a la analista para que haga la radicación formal ante la entidad.', goto:'radica_entidad'},
+    no:{texto:'No se radica. El asesor deja registrado el motivo (no le convenció la tasa, la cuota, cambió de opinión) — el caso no avanza más allá de este punto.', goto:null}
+  }
+},
+radica_entidad: {
+  tag:'Analista · Tarea', resp:'Analista', respColor:'#F1ECFE,#4C2E9E',
+  desc:'Con el cliente ya de acuerdo, la analista hace el proceso formal de radicación directamente ante la entidad — verificando que cada documento esté completo y correcto, precisamente para que no haya devoluciones después.',
+  metricas:['Radicaciones — mínimo 60/semana, meta 100/semana'],
+  siguiente:{texto:'Se confirma si la entidad devuelve algo', goto:'hay_devolucion'}
+},
+hay_devolucion: {
+  tag:'Analista · Punto de decisión', resp:'Analista + Entidad', respColor:'#F1ECFE,#4C2E9E',
+  desc:'Después de radicar, la entidad puede devolver el caso si encuentra algo pendiente o mal diligenciado.',
+  decision:{
+    pregunta:'¿La entidad devuelve el caso por algo pendiente?',
+    si:{texto:'La analista corrige lo que haga falta (a veces necesita un documento nuevo del cliente, y ahí vuelve a pedirle apoyo al asesor) y vuelve a radicar.', goto:'radica_entidad'},
+    no:{texto:'El caso queda radicado en firme — sigue a seguimiento hasta el desembolso.', goto:'seguimiento_credito'}
+  }
+},
+desembolsa: {
+  tag:'Asesor · Evento', resp:'Entidad financiera', respColor:'#DCFCE7,#166534',
+  desc:'El banco o la financiera realiza el desembolso al cliente. Este es el momento que dispara todo el ciclo administrativo — CifraCRM debe reflejar el cambio de estado para que la cadena de Cierres y el pago de comisión arranque.',
+  siguiente:{texto:'El sistema marca el crédito como desembolsado', goto:'crm_marca'}
+},
+seguimiento_credito: {
+  tag:'Analista · Tarea continua', resp:'Analista', respColor:'#F1ECFE,#4C2E9E',
+  desc:'La analista monitorea el estado del crédito hasta que se desembolsa, y escala directamente con la entidad si el tiempo se está alargando más de lo normal.',
+  metricas:['Tiempo prospecto → desembolso — referencia 15 días hábiles, alerta +25 días','Control de CRM del equipo — 100% al día'],
+  siguiente:{texto:'Cierra el ciclo con el reporte semanal', goto:'reporte_viernes'}
+},
+reporte_viernes: {
+  tag:'Analista · Tarea', resp:'Analista', respColor:'#F1ECFE,#4C2E9E',
+  desc:'Cada viernes, la analista consolida el estado de todos los casos de la semana y se lo entrega a la gerencia — qué se desembolsó, qué está trabado, y por qué.',
+  metricas:['Reporte semanal — todos los viernes'],
+  siguiente:{texto:'La gerencia lo recibe al revisar Cierres', goto:'revisa_cierres'}
+},
+crm_marca: {
+  tag:'Sistemas · Tarea automática', resp:'CifraCRM', respColor:'#F3F4F6,#374151',
+  desc:'Apenas se confirma el desembolso, el estado del crédito cambia de "radicado" a "desembolsado" dentro de CifraCRM, con la fecha exacta. Este cambio de estado es la señal que activa todo lo que sigue.',
+  siguiente:{texto:'La API transmite el dato a Cierres', goto:'api'}
+},
+api: {
+  tag:'Sistemas · Integración', resp:'Equipo de tecnología de Cifra', respColor:'#F3F4F6,#374151',
+  desc:'La información del crédito desembolsado — asesor, entidad, monto, fecha, cliente — se envía automáticamente a Cierres, sin que nadie tenga que subir un Excel a mano. Esta es la pieza que reemplaza el proceso manual de carga.',
+  decision:{
+    pregunta:'¿Ya está esto funcionando de punta a punta?',
+    si:{texto:'Confirmado con Cifra que la API existe y trae los mismos campos que traía el Excel que se cargaba antes a mano.', goto:null},
+    no:{texto:'Pendiente: fecha comprometida de entrega, prueba real con datos en vivo, y quién programa la conexión dentro de Cierres.', goto:null}
+  },
+  siguiente:{texto:'Cierres calcula la comisión', goto:'cierres_calcula'}
+},
+cierres_calcula: {
+  tag:'Sistemas · Cálculo automático', resp:'Cierres', respColor:'#F3F4F6,#374151',
+  desc:'Con el dato ya adentro, Cierres aplica la lógica correspondiente según el tipo de asesor. Si es asesor interno, corre el sistema de puntos (puntos por entidad, con umbral mínimo, meta, y el bono de mercado natural si aplica). Si es asesor externo, aplica la tarifa en pesos por millón según esa entidad específica.',
+  herramientas:[
+    {n:'Sistema de puntos', d:'Solo para asesor interno — puntos por millón según la entidad, con el mecanismo de umbral y meta.'},
+    {n:'Tarifas por entidad', d:'Para asesor externo — un valor fijo en pesos por millón, distinto por cada banco o financiera.'}
+  ],
+  siguiente:{texto:'Se genera el documento de pago', goto:'cuenta_pago'}
+},
+cuenta_pago: {
+  tag:'Sistemas · Documento', resp:'Cierres', respColor:'#F3F4F6,#374151',
+  desc:'Cierres arma el documento con el desglose completo — operación por operación, el total de puntos o el total en pesos, listo para que la gerencia lo revise y apruebe.',
+  siguiente:{texto:'La gerencia lo revisa', goto:'revisa_cierres'}
+},
+revisa_cierres: {
+  tag:'Gerencia · Tarea', resp:'Sebastián — Gerente Comercial', respColor:'#E6F8FA,#0A2540',
+  desc:'Revisión final antes de pagar — que los cálculos cuadren, que no haya ninguna entidad sin configurar (Cierres avisa si algún punto quedó sin definir), y una mirada general del desempeño del equipo ese mes.',
+  herramientas:[{n:'Cierres', d:'Vista administrativa completa — nunca la ven los asesores.'}],
+  siguiente:{texto:'Se aprueba y se paga', goto:'aprueba_pago'}
+},
+aprueba_pago: {
+  tag:'Gerencia · Tarea', resp:'Sebastián', respColor:'#E6F8FA,#0A2540',
+  desc:'El pago sale según las condiciones de cada tipo de entidad — financieras se pagan los viernes sobre lo causado hasta el martes de esa semana; bancos se pagan entre el 10 y el 15 del mes siguiente al desembolso.',
+  siguiente:{texto:'Se definen las reglas del siguiente ciclo', goto:'define_metas'}
+},
+define_metas: {
+  tag:'Gerencia · Tarea estratégica', resp:'Sebastián', respColor:'#E6F8FA,#0A2540',
+  desc:'Con la información del mes (qué tan bien le fue al equipo, qué entidades rindieron más, dónde hubo cuellos de botella), la gerencia ajusta lo que haga falta — metas de KPI, tarifas por entidad, umbrales del sistema de puntos. Esto retroalimenta directamente el trabajo del asesor y de la analista desde el primer día del mes siguiente.',
+  herramientas:[{n:'Manual Operativo', d:'Documento vivo — cada ajuste de meta o política se actualiza ahí.'}],
+  siguiente:{texto:'El ciclo se cierra', goto:'fin_ciclo'}
+},
+fin_ciclo: {
+  tag:'Gerencia · Evento de fin', resp:'—', respColor:'#0A2540,#ffffff',
+  desc:'El ciclo mensual se cierra. Las metas y políticas recién ajustadas alimentan directamente el trabajo del asesor y la analista desde el primer día del siguiente mes — no es un proceso lineal que termina, es un ciclo que se repite y se afina cada vez.',
+  siguiente:{texto:'Vuelve al inicio del ciclo con el asesor', goto:'contacta'}
+}
+
+};
+</script>
+<script>
+function mostrar(id){
+  const n = NODES[id];
+  if(!n) return;
+
+  // resaltar la caja seleccionada
+  document.querySelectorAll('.step').forEach(el=>el.classList.remove('selected'));
+  const activa = document.querySelector(`[data-node="${id}"]`);
+  if(activa) activa.classList.add('selected');
+
+  const [respBg, respColor] = n.respColor.split(',');
+
+  let html = `
+    <div class="p-tag">${n.tag}</div>
+    <div class="p-title">${tituloDeCaja(id)}</div>
+    <div class="p-resp" style="background:${respBg};color:${respColor}">👤 ${n.resp}</div>
+    <div class="p-section">
+      <div class="p-desc">${n.desc}</div>
+    </div>`;
+
+  if(n.herramientas){
+    html += `<div class="p-section"><h4>🔧 Herramientas</h4>`;
+    n.herramientas.forEach(h=>{
+      html += `<div class="p-tool"><b>${h.n}</b>${h.d}</div>`;
+    });
+    html += `</div>`;
+  }
+
+  if(n.metricas){
+    html += `<div class="p-section"><h4>🎯 Métricas / notas</h4>`;
+    n.metricas.forEach(m=>{
+      html += `<div class="p-metric">${m}</div>`;
+    });
+    html += `</div>`;
+  }
+
+  if(n.decision){
+    html += `<div class="p-section"><h4>⚡ Punto de decisión</h4>
+      <div class="p-decision">
+        <div style="font-weight:700;font-size:13px;color:#92400E;margin-bottom:10px">${n.decision.pregunta}</div>
+        <div class="p-branch si" ${n.decision.si.goto?`onclick="mostrar('${n.decision.si.goto}')"`:''}>
+          <b>✅ SÍ</b>${n.decision.si.texto}
+          ${n.decision.si.goto?`<div class="goto">→ Ver: ${tituloDeCaja(n.decision.si.goto)}</div>`:''}
+        </div>
+        <div class="p-branch no" ${n.decision.no.goto?`onclick="mostrar('${n.decision.no.goto}')"`:''}>
+          <b>❌ NO</b>${n.decision.no.texto}
+          ${n.decision.no.goto?`<div class="goto">→ Ver: ${tituloDeCaja(n.decision.no.goto)}</div>`:''}
+        </div>
+      </div>
+    </div>`;
+  }
+
+  if(n.siguientes){ // caso especial: inicio, con dos caminos
+    html += `<div class="p-section"><h4>➡️ Siguiente paso</h4>`;
+    n.siguientes.forEach(s=>{
+      html += `<div class="p-next" onclick="mostrar('${s.goto}')" style="margin-bottom:8px"><b>Continúa</b>${s.texto}</div>`;
+    });
+    html += `</div>`;
+  } else if(n.siguiente){
+    html += `<div class="p-section"><h4>➡️ Siguiente paso</h4>
+      <div class="p-next" onclick="mostrar('${n.siguiente.goto}')"><b>Continúa</b>${n.siguiente.texto}</div>
+    </div>`;
+  }
+
+  document.getElementById('panel').innerHTML = html;
+  document.getElementById('panel').scrollTop = 0;
+}
+
+// Saca el título "humano" de una caja a partir de su texto visible en el diagrama
+function tituloDeCaja(id){
+  const el = document.querySelector(`[data-node="${id}"]`);
+  return el ? el.textContent.trim() : id;
+}
+</script>
+</body>
+</html>
